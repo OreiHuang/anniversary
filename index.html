@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小满 · 三载情深</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600;700&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ivory: #FFF8F0;
+    --parchment: #F5E6D0;
+    --gold: #C9956B;
+    --gold-light: #E8C9A0;
+    --red-deep: #8B2252;
+    --red-soft: #C4547A;
+    --jade: #2D6A4F;
+    --jade-light: #52B788;
+    --mahjong-face: #F0E6D2;
+    --mahjong-back: #1B7A4A;
+    --ink: #2C1810;
+    --ink-light: #5C4033;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+
+  body {
+    font-family: 'Noto Serif SC', 'STSong', serif;
+    background: var(--ivory);
+    color: var(--ink);
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ── Noise texture overlay ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ── Floating Mahjong Tiles ── */
+  .mahjong-float-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .mahjong-tile {
+    position: absolute;
+    font-size: 2rem;
+    opacity: 0;
+    animation: floatTile linear infinite;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.1));
+    user-select: none;
+  }
+
+  @keyframes floatTile {
+    0% {
+      opacity: 0;
+      transform: translateY(110vh) rotate(0deg) scale(0.8);
+    }
+    5% { opacity: 0.6; }
+    90% { opacity: 0.4; }
+    100% {
+      opacity: 0;
+      transform: translateY(-10vh) rotate(360deg) scale(1.1);
+    }
+  }
+
+  /* ── Hero Section ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(201,149,107,0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 80%, rgba(139,34,82,0.08) 0%, transparent 50%),
+      linear-gradient(175deg, var(--ivory) 0%, var(--parchment) 100%);
+    overflow: hidden;
+    padding: 2rem;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background:
+      repeating-conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(201,149,107,0.03) 1deg, transparent 2deg);
+    animation: rotatePattern 120s linear infinite;
+  }
+
+  @keyframes rotatePattern {
+    to { transform: rotate(360deg); }
+  }
+
+  /* ── Mahjong border decoration ── */
+  .mahjong-border {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .mahjong-border .tile {
+    width: 42px;
+    height: 56px;
+    background: linear-gradient(135deg, #FFFEF8, var(--mahjong-face));
+    border: 2px solid var(--gold-light);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    box-shadow:
+      0 2px 4px rgba(0,0,0,0.1),
+      inset 0 1px 0 rgba(255,255,255,0.8),
+      inset 0 -1px 0 rgba(0,0,0,0.05);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: default;
+    position: relative;
+  }
+
+  .mahjong-border .tile::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border: 1px solid rgba(201,149,107,0.2);
+    border-radius: 3px;
+  }
+
+  .mahjong-border .tile:hover {
+    transform: translateY(-8px) rotateX(10deg);
+    box-shadow:
+      0 12px 24px rgba(0,0,0,0.15),
+      inset 0 1px 0 rgba(255,255,255,0.8);
+    border-color: var(--gold);
+  }
+
+  .tile-red { color: var(--red-deep) !important; }
+  .tile-green { color: var(--jade) !important; }
+  .tile-blue { color: #2C5F8A !important; }
+
+  /* ── Title ── */
+  .hero-title {
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: clamp(3rem, 8vw, 6rem);
+    color: var(--red-deep);
+    text-shadow:
+      2px 2px 0 rgba(201,149,107,0.3),
+      0 0 40px rgba(139,34,82,0.1);
+    position: relative;
+    z-index: 2;
+    letter-spacing: 0.1em;
+    animation: titleReveal 1.5s ease-out;
+  }
+
+  @keyframes titleReveal {
+    from {
+      opacity: 0;
+      transform: translateY(30px) scale(0.95);
+      filter: blur(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0);
+    }
+  }
+
+  .hero-names {
+    font-family: 'ZCOOL XiaoWei', serif;
+    font-size: clamp(1.2rem, 3.5vw, 1.8rem);
+    color: var(--red-deep);
+    margin-top: 1.2rem;
+    letter-spacing: 0.4em;
+    position: relative;
+    z-index: 2;
+    animation: titleReveal 1.5s ease-out 0.3s both;
+  }
+
+  .hero-motto {
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    color: var(--gold);
+    margin-top: 0.8rem;
+    letter-spacing: 0.5em;
+    position: relative;
+    z-index: 2;
+    animation: titleReveal 1.5s ease-out 0.45s both;
+  }
+
+  .hero-subtitle {
+    font-family: 'ZCOOL XiaoWei', serif;
+    font-size: clamp(1rem, 3vw, 1.5rem);
+    color: var(--ink-light);
+    margin-top: 0.6rem;
+    letter-spacing: 0.3em;
+    position: relative;
+    z-index: 2;
+    animation: titleReveal 1.5s ease-out 0.6s both;
+  }
+
+  .hero-date {
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    color: var(--gold);
+    margin-top: 1.5rem;
+    letter-spacing: 0.2em;
+    position: relative;
+    z-index: 2;
+    animation: titleReveal 1.5s ease-out 0.6s both;
+  }
+
+  /* ── Scroll indicator ── */
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--gold);
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    animation: scrollBounce 2s ease-in-out infinite;
+    z-index: 2;
+  }
+
+  .scroll-hint .arrow {
+    width: 20px;
+    height: 20px;
+    border-right: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    transform: rotate(45deg);
+    opacity: 0.6;
+  }
+
+  @keyframes scrollBounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(10px); }
+  }
+
+  /* ── Letter Section ── */
+  .letter-section {
+    position: relative;
+    padding: 6rem 2rem;
+    display: flex;
+    justify-content: center;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(201,149,107,0.08) 0%, transparent 60%),
+      var(--ivory);
+  }
+
+  .letter {
+    max-width: 680px;
+    width: 100%;
+    background:
+      linear-gradient(180deg, rgba(255,248,240,0.9), rgba(245,230,208,0.6)),
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 39px,
+        rgba(201,149,107,0.08) 39px,
+        rgba(201,149,107,0.08) 40px
+      );
+    border: 1px solid rgba(201,149,107,0.3);
+    border-radius: 4px;
+    padding: 3rem 2.5rem;
+    position: relative;
+    box-shadow:
+      0 4px 20px rgba(0,0,0,0.05),
+      0 1px 3px rgba(0,0,0,0.03);
+  }
+
+  .letter::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .letter-seal {
+    position: absolute;
+    top: -20px;
+    right: 30px;
+    width: 56px;
+    height: 56px;
+    background: var(--red-deep);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold-light);
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: 1.2rem;
+    box-shadow: 0 3px 12px rgba(139,34,82,0.3);
+    transform: rotate(-15deg);
+    border: 2px solid rgba(255,255,255,0.2);
+  }
+
+  .letter-greeting {
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: 1.8rem;
+    color: var(--red-deep);
+    margin-bottom: 2rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s ease-out;
+  }
+
+  .letter-greeting.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .letter-body {
+    font-size: 1.15rem;
+    line-height: 2.2;
+    color: var(--ink);
+    letter-spacing: 0.05em;
+  }
+
+  .letter-body p {
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s ease-out;
+  }
+
+  .letter-body p.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .letter-body .highlight {
+    color: var(--red-deep);
+    font-weight: 600;
+    position: relative;
+  }
+
+  .letter-body .highlight::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--red-soft), transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s ease-out 0.3s;
+  }
+
+  .letter-body .highlight.visible::after {
+    transform: scaleX(1);
+  }
+
+  .letter-signature {
+    text-align: right;
+    margin-top: 2.5rem;
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: 1.4rem;
+    color: var(--gold);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s ease-out;
+  }
+
+  .letter-signature.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── Mahjong Divider ── */
+  .mahjong-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 3rem 0;
+    position: relative;
+  }
+
+  .mahjong-divider .line {
+    flex: 1;
+    max-width: 120px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
+  }
+
+  .mahjong-divider .tile-group {
+    display: flex;
+    gap: 0.3rem;
+  }
+
+  .mahjong-divider .mini-tile {
+    width: 32px;
+    height: 42px;
+    background: linear-gradient(135deg, #FFFEF8, var(--mahjong-face));
+    border: 1.5px solid var(--gold-light);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease;
+  }
+
+  .mahjong-divider .mini-tile:hover {
+    transform: rotate(-5deg) scale(1.1);
+  }
+
+  /* ── Blessing Section ── */
+  .blessing-section {
+    position: relative;
+    padding: 5rem 2rem 6rem;
+    background:
+      radial-gradient(ellipse at 50% 50%, rgba(139,34,82,0.04) 0%, transparent 60%),
+      linear-gradient(180deg, var(--ivory), var(--parchment) 50%, var(--ivory));
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .blessing-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 10%, var(--gold-light) 50%, transparent 90%);
+  }
+
+  .blessing-title {
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    color: var(--gold);
+    margin-bottom: 3rem;
+    letter-spacing: 0.2em;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s ease-out;
+  }
+
+  .blessing-title.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .blessing-text {
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
+    line-height: 2.4;
+    color: var(--ink);
+    letter-spacing: 0.1em;
+  }
+
+  .blessing-char {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .blessing-char.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .blessing-char.highlight-char {
+    color: var(--red-deep);
+    font-weight: 700;
+    text-shadow: 0 0 20px rgba(139,34,82,0.2);
+  }
+
+  /* ── Mahjong Wall Section ── */
+  .mahjong-wall {
+    padding: 4rem 2rem;
+    background: var(--ivory);
+    text-align: center;
+  }
+
+  .wall-title {
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: 1.8rem;
+    color: var(--gold);
+    margin-bottom: 2rem;
+    letter-spacing: 0.15em;
+  }
+
+  .wall-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    max-width: 500px;
+    margin: 0 auto;
+    perspective: 800px;
+  }
+
+  .wall-tile {
+    width: 48px;
+    height: 64px;
+    background: linear-gradient(145deg, #FFFEF8, var(--mahjong-face));
+    border: 2px solid var(--gold-light);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow:
+      0 3px 6px rgba(0,0,0,0.1),
+      inset 0 1px 0 rgba(255,255,255,0.8);
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-style: preserve-3d;
+    position: relative;
+    opacity: 0;
+    animation: tileAppear 0.5s ease-out forwards;
+  }
+
+  .wall-tile::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px solid rgba(201,149,107,0.15);
+    border-radius: 3px;
+  }
+
+  .wall-tile:hover {
+    transform: translateY(-12px) rotateY(10deg) rotateX(-5deg);
+    box-shadow:
+      0 16px 32px rgba(0,0,0,0.15),
+      inset 0 1px 0 rgba(255,255,255,0.8);
+    border-color: var(--gold);
+    z-index: 10;
+  }
+
+  .wall-tile:active {
+    transform: translateY(-4px) scale(0.95);
+  }
+
+  @keyframes tileAppear {
+    from {
+      opacity: 0;
+      transform: translateY(30px) rotateX(20deg);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) rotateX(0);
+    }
+  }
+
+  .wall-hint {
+    margin-top: 2rem;
+    font-size: 0.85rem;
+    color: var(--ink-light);
+    letter-spacing: 0.1em;
+    opacity: 0.6;
+  }
+
+  /* ── Timeline Section ── */
+  .timeline-section {
+    padding: 5rem 2rem;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(45,106,79,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 50%, rgba(139,34,82,0.04) 0%, transparent 50%),
+      var(--ivory);
+  }
+
+  .timeline-title {
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 3rem;
+    letter-spacing: 0.2em;
+  }
+
+  .timeline {
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    padding-left: 40px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, transparent, var(--gold-light) 10%, var(--gold-light) 90%, transparent);
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all 0.6s ease-out;
+  }
+
+  .timeline-item.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -33px;
+    top: 8px;
+    width: 12px;
+    height: 12px;
+    background: var(--gold);
+    border-radius: 50%;
+    border: 3px solid var(--ivory);
+    box-shadow: 0 0 0 2px var(--gold-light);
+  }
+
+  .timeline-year {
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: 1.2rem;
+    color: var(--red-deep);
+    margin-bottom: 0.3rem;
+  }
+
+  .timeline-text {
+    font-size: 1rem;
+    color: var(--ink-light);
+    line-height: 1.8;
+  }
+
+  .timeline-tile {
+    display: inline-block;
+    margin-right: 0.3rem;
+    transition: transform 0.3s ease;
+  }
+
+  .timeline-tile:hover {
+    transform: rotate(-10deg) scale(1.2);
+  }
+
+  /* ── Footer ── */
+  .footer {
+    padding: 4rem 2rem 3rem;
+    text-align: center;
+    background:
+      linear-gradient(180deg, var(--ivory), var(--parchment));
+    position: relative;
+  }
+
+  .footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 10%, var(--gold-light) 50%, transparent 90%);
+  }
+
+  .footer-tiles {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .footer-tile {
+    font-size: 1.5rem;
+    opacity: 0.6;
+    transition: all 0.3s ease;
+  }
+
+  .footer-tile:hover {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+
+  .footer-text {
+    font-family: 'ZCOOL XiaoWei', serif;
+    font-size: 0.9rem;
+    color: var(--ink-light);
+    letter-spacing: 0.15em;
+    opacity: 0.6;
+  }
+
+  .footer-heart {
+    display: inline-block;
+    color: var(--red-deep);
+    animation: heartbeat 1.5s ease-in-out infinite;
+  }
+
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    15% { transform: scale(1.15); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.1); }
+  }
+
+  /* ── Mahjong Popup ── */
+  .mahjong-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: linear-gradient(145deg, #FFFEF8, var(--mahjong-face));
+    border: 3px solid var(--gold);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    z-index: 1000;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    max-width: 280px;
+  }
+
+  .mahjong-popup.show {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .mahjong-popup .popup-tile {
+    font-size: 3rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .mahjong-popup .popup-text {
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: 1.2rem;
+    color: var(--red-deep);
+  }
+
+  .popup-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.2);
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .popup-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .letter {
+      padding: 2rem 1.5rem;
+    }
+
+    .letter-seal {
+      width: 44px;
+      height: 44px;
+      font-size: 1rem;
+      top: -16px;
+      right: 20px;
+    }
+
+    .mahjong-border .tile {
+      width: 36px;
+      height: 48px;
+      font-size: 1.1rem;
+    }
+
+    .wall-tile {
+      width: 40px;
+      height: 54px;
+      font-size: 1.2rem;
+    }
+
+    .timeline {
+      padding-left: 32px;
+    }
+
+    .timeline::before {
+      left: 11px;
+    }
+
+    .timeline-item::before {
+      left: -29px;
+      width: 10px;
+      height: 10px;
+    }
+  }
+
+  /* ── Sparkle effect ── */
+  .sparkle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 100;
+    animation: sparkleAnim 0.8s ease-out forwards;
+  }
+
+  @keyframes sparkleAnim {
+    0% {
+      opacity: 1;
+      transform: scale(0) rotate(0deg);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1) rotate(180deg);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0.5) rotate(360deg);
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Floating Mahjong Tiles Background -->
+<div class="mahjong-float-container" id="floatContainer"></div>
+
+<!-- Popup -->
+<div class="popup-overlay" id="popupOverlay"></div>
+<div class="mahjong-popup" id="mahjongPopup">
+  <div class="popup-tile" id="popupTile"></div>
+  <div class="popup-text" id="popupText"></div>
+</div>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero">
+  <div class="mahjong-border">
+    <div class="tile tile-red">🀅</div>
+    <div class="tile tile-green">🀇</div>
+    <div class="tile tile-red">🀈</div>
+    <div class="tile">🀉</div>
+    <div class="tile tile-green">🀊</div>
+    <div class="tile tile-red">🀄</div>
+    <div class="tile">🀋</div>
+    <div class="tile tile-green">🀌</div>
+    <div class="tile tile-red">🀍</div>
+  </div>
+
+  <h1 class="hero-title">小满 · 三载</h1>
+  <p class="hero-names">嘉民 & 佳慧</p>
+  <p class="hero-motto">小满胜万全</p>
+  <p class="hero-subtitle">相遇五年 · 结婚三载</p>
+  <p class="hero-date">二〇二一 · 相遇 — 二〇二三 · 五月廿一 · 结婚</p>
+
+  <div class="scroll-hint">
+    <span>轻展书卷</span>
+    <div class="arrow"></div>
+  </div>
+</section>
+
+<!-- ═══════════ LETTER ═══════════ -->
+<section class="letter-section">
+  <div class="letter">
+    <div class="letter-seal">慧</div>
+
+    <div class="letter-greeting" data-animate>
+      亲爱的佳慧：
+    </div>
+
+    <div class="letter-body">
+      <p data-animate>
+        2021年相遇，2023年小满领证，到今天——恰是我们结婚的第三年。麦穗初齐，枇杷半黄，万物将熟未熟——像极了我们之间最好的状态：<span class="highlight" data-animate>不急不躁，恰到好处</span>。
+      </p>
+      <p data-animate>
+        从相识到相守，你为这个家遮风挡雨，操持内外。那些早起的清晨、加班的深夜、为我留的一盏灯，我都记得。<span class="highlight" data-animate>辛苦了</span>。
+      </p>
+      <p data-animate>
+        往后余生，愿星糖入你们枕边，甜梦常伴。<span class="highlight" data-animate>我护你们岁岁年年</span>。
+      </p>
+      <p data-animate>
+        佳慧，五年相伴，三年婚姻。<span class="highlight" data-animate>小满胜万全</span>，有你在侧，便是圆满。
+      </p>
+    </div>
+
+    <div class="letter-signature" data-animate>
+      —— 嘉民<br>
+      <small style="font-size:0.7em; opacity:0.7;">二〇二六年 · 小满</small>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ DIVIDER ═══════════ -->
+<div class="mahjong-divider">
+  <div class="line"></div>
+  <div class="tile-group">
+    <div class="mini-tile">🀅</div>
+    <div class="mini-tile">🀄</div>
+    <div class="mini-tile">🀆</div>
+  </div>
+  <div class="line"></div>
+</div>
+
+<!-- ═══════════ BLESSING ═══════════ -->
+<section class="blessing-section">
+  <h2 class="blessing-title" data-animate>· 祝 福 ·</h2>
+  <div class="blessing-text" id="blessingText"></div>
+</section>
+
+<!-- ═══════════ MAHJONG WALL ═══════════ -->
+<section class="mahjong-wall">
+  <h3 class="wall-title">· 鹊桥牌墙 ·</h3>
+  <div class="wall-grid" id="wallGrid"></div>
+  <p class="wall-hint">轻触牌面，翻出惊喜</p>
+</section>
+
+<!-- ═══════════ TIMELINE ═══════════ -->
+<section class="timeline-section">
+  <h2 class="timeline-title">· 三年点滴 ·</h2>
+  <div class="timeline">
+    <div class="timeline-item" data-animate>
+      <div class="timeline-year"><span class="timeline-tile">🀇</span> 2021 · 相遇</div>
+      <div class="timeline-text">茫茫人海，一眼万年。缘分如牌局，起手便知是天胡。</div>
+    </div>
+    <div class="timeline-item" data-animate>
+      <div class="timeline-year"><span class="timeline-tile">🀈</span> 2023.05.21 · 领证</div>
+      <div class="timeline-text">小满时节，执子之手。一张证书，两颗真心，从此风雨同舟。</div>
+    </div>
+    <div class="timeline-item" data-animate>
+      <div class="timeline-year"><span class="timeline-tile">🀉</span> 2024 · 相守</div>
+      <div class="timeline-text">柴米油盐里写诗，锅碗瓢盆中奏乐。平凡日子里的每一刻，都是自摸的好牌。</div>
+    </div>
+    <div class="timeline-item" data-animate>
+      <div class="timeline-year"><span class="timeline-tile">🀊</span> 2026 · 三周年</div>
+      <div class="timeline-text">三载春秋，小满即安。往后余生，岁岁年年。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer class="footer">
+  <div class="footer-tiles">
+    <span class="footer-tile">🀅</span>
+    <span class="footer-tile">🀄</span>
+    <span class="footer-tile">🀆</span>
+  </div>
+  <p class="footer-text">
+    嘉民 & 佳慧 · 小满三周年
+    <span class="footer-heart">♥</span>
+    2021 — 2026
+    <br><small style="opacity:0.5; letter-spacing:0.3em;">小满胜万全</small>
+  </p>
+</footer>
+
+<script>
+// ── Floating Mahjong Tiles ──
+const mahjongChars = ['🀇','🀈','🀉','🀊','🀋','🀌','🀍','🀎','🀏','🀅','🀄','🀆','🀐','🀑','🀒','🀓','🀔','🀕','🀖','🀗','🀘'];
+const floatContainer = document.getElementById('floatContainer');
+
+function createFloatingTile() {
+  const tile = document.createElement('div');
+  tile.className = 'mahjong-tile';
+  tile.textContent = mahjongChars[Math.floor(Math.random() * mahjongChars.length)];
+  tile.style.left = Math.random() * 100 + '%';
+  tile.style.fontSize = (1.2 + Math.random() * 1.5) + 'rem';
+  tile.style.animationDuration = (12 + Math.random() * 18) + 's';
+  tile.style.animationDelay = Math.random() * 2 + 's';
+
+  const colors = ['rgba(139,34,82,0.4)', 'rgba(45,106,79,0.4)', 'rgba(201,149,107,0.4)', 'rgba(44,95,138,0.4)'];
+  tile.style.color = colors[Math.floor(Math.random() * colors.length)];
+
+  floatContainer.appendChild(tile);
+
+  setTimeout(() => tile.remove(), 30000);
+}
+
+// Initial tiles
+for (let i = 0; i < 8; i++) {
+  setTimeout(createFloatingTile, i * 800);
+}
+setInterval(createFloatingTile, 3000);
+
+// ── Scroll Animations ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, index) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => {
+        entry.target.classList.add('visible');
+      }, index * 150);
+    }
+  });
+}, { threshold: 0.2, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
+
+// ── Blessing Text Character Animation ──
+const blessingText = '人间小满，恰是三载。你为家遮风挡雨，辛苦了。愿星糖入你们枕边，我护你们岁岁年年。小满胜万全。';
+const blessingContainer = document.getElementById('blessingText');
+const highlightWords = ['小满', '三载', '辛苦了', '星糖', '岁岁年年', '小满胜万全'];
+
+blessingText.split('').forEach((char, i) => {
+  const span = document.createElement('span');
+  span.className = 'blessing-char';
+  span.textContent = char;
+
+  const isHighlight = highlightWords.some(word => {
+    const start = blessingText.indexOf(word);
+    return i >= start && i < start + word.length;
+  });
+  if (isHighlight) span.classList.add('highlight-char');
+
+  blessingContainer.appendChild(span);
+});
+
+const blessingObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const chars = blessingContainer.querySelectorAll('.blessing-char');
+      chars.forEach((char, i) => {
+        setTimeout(() => char.classList.add('visible'), i * 60);
+      });
+      blessingObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.3 });
+
+blessingObserver.observe(blessingContainer);
+
+// ── Mahjong Wall ──
+const wallMessages = [
+  { tile: '🀅', text: '万事如意' },
+  { tile: '🀄', text: '红运当头' },
+  { tile: '🀆', text: '福星高照' },
+  { tile: '🀇', text: '一帆风顺' },
+  { tile: '🀈', text: '两情相悦' },
+  { tile: '🀉', text: '三生有幸' },
+  { tile: '🀊', text: '四季平安' },
+  { tile: '🀋', text: '五福临门' },
+  { tile: '🀌', text: '六六大顺' },
+  { tile: '🀍', text: '七星高照' },
+  { tile: '🀎', text: '八方来财' },
+  { tile: '🀏', text: '九九同心' },
+];
+
+const wallGrid = document.getElementById('wallGrid');
+const shuffled = [...wallMessages].sort(() => Math.random() - 0.5);
+
+shuffled.forEach((item, i) => {
+  const tile = document.createElement('div');
+  tile.className = 'wall-tile';
+  tile.textContent = item.tile;
+  tile.style.animationDelay = (i * 0.08) + 's';
+  tile.dataset.message = item.text;
+  tile.addEventListener('click', () => showPopup(item.tile, item.text));
+  wallGrid.appendChild(tile);
+});
+
+// ── Popup ──
+function showPopup(tileChar, message) {
+  document.getElementById('popupTile').textContent = tileChar;
+  document.getElementById('popupText').textContent = message;
+  document.getElementById('mahjongPopup').classList.add('show');
+  document.getElementById('popupOverlay').classList.add('show');
+}
+
+document.getElementById('popupOverlay').addEventListener('click', () => {
+  document.getElementById('mahjongPopup').classList.remove('show');
+  document.getElementById('popupOverlay').classList.remove('show');
+});
+
+// ── Click Sparkle Effect ──
+document.addEventListener('click', (e) => {
+  const sparkleChars = ['✨', '🀅', '🀄', '⭐', '💫'];
+  for (let i = 0; i < 3; i++) {
+    const sparkle = document.createElement('div');
+    sparkle.className = 'sparkle';
+    sparkle.textContent = sparkleChars[Math.floor(Math.random() * sparkleChars.length)];
+    sparkle.style.left = (e.clientX + (Math.random() - 0.5) * 40) + 'px';
+    sparkle.style.top = (e.clientY + (Math.random() - 0.5) * 40) + 'px';
+    sparkle.style.fontSize = (0.8 + Math.random() * 0.8) + 'rem';
+    document.body.appendChild(sparkle);
+    setTimeout(() => sparkle.remove(), 800);
+  }
+});
+
+// ── Parallax on hero ──
+window.addEventListener('scroll', () => {
+  const scrolled = window.pageYOffset;
+  const hero = document.querySelector('.hero');
+  if (hero) {
+    hero.style.setProperty('--scroll', scrolled * 0.3 + 'px');
+    hero.style.backgroundPositionY = scrolled * 0.3 + 'px';
+  }
+});
+</script>
+</body>
+</html>
