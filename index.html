@@ -721,6 +721,188 @@
     animation: heartbeat 1.5s ease-in-out infinite;
   }
 
+  /* ── Photo Gallery ── */
+  .gallery-section {
+    padding: 5rem 2rem;
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(201,149,107,0.06) 0%, transparent 60%),
+      var(--ivory);
+    position: relative;
+  }
+
+  .gallery-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 10%, var(--gold-light) 50%, transparent 90%);
+  }
+
+  .gallery-title {
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.2em;
+  }
+
+  .gallery-subtitle {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--ink-light);
+    letter-spacing: 0.15em;
+    margin-bottom: 3rem;
+    opacity: 0.6;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2rem;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .gallery-item {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    aspect-ratio: 3/4;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    border: 3px solid var(--mahjong-face);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+
+  .gallery-item.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .gallery-item:nth-child(1).visible { transition-delay: 0s; }
+  .gallery-item:nth-child(2).visible { transition-delay: 0.12s; }
+  .gallery-item:nth-child(3).visible { transition-delay: 0.24s; }
+  .gallery-item:nth-child(4).visible { transition-delay: 0.36s; }
+
+  .gallery-item::before {
+    content: '';
+    position: absolute;
+    inset: 5px;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 4px;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+
+  .gallery-item:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+    border-color: var(--gold);
+  }
+
+  .gallery-item:hover img {
+    transform: scale(1.08);
+  }
+
+  .gallery-tile {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 28px;
+    height: 38px;
+    background: linear-gradient(135deg, #FFFEF8, var(--mahjong-face));
+    border: 1.5px solid var(--gold-light);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    z-index: 3;
+    transition: transform 0.3s ease;
+  }
+
+  .gallery-item:hover .gallery-tile {
+    transform: rotate(-10deg) scale(1.1);
+  }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.9);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    backdrop-filter: blur(8px);
+  }
+
+  .lightbox.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .lightbox img {
+    max-width: 90vw;
+    max-height: 85vh;
+    border-radius: 8px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+  }
+
+  .lightbox.show img {
+    transform: scale(1);
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    width: 40px;
+    height: 40px;
+    background: rgba(255,255,255,0.15);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 1.4rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+  }
+
+  .lightbox-close:hover {
+    background: rgba(255,255,255,0.3);
+  }
+
+  @media (max-width: 480px) {
+    .gallery-grid {
+      gap: 0.8rem;
+    }
+
+    .gallery-item {
+      border-width: 2px;
+    }
+  }
+
   @keyframes heartbeat {
     0%, 100% { transform: scale(1); }
     15% { transform: scale(1.15); }
@@ -956,6 +1138,36 @@
   </div>
 </section>
 
+<!-- ═══════════ GALLERY ═══════════ -->
+<section class="gallery-section">
+  <h2 class="gallery-title">· 我们的时光 ·</h2>
+  <p class="gallery-subtitle">四张照片，一段旅程</p>
+  <div class="gallery-grid">
+    <div class="gallery-item" data-animate data-src="photos/photo1.jpg">
+      <img src="photos/photo1.jpg" alt="我们的故事" loading="lazy">
+      <div class="gallery-tile">🀇</div>
+    </div>
+    <div class="gallery-item" data-animate data-src="photos/photo2.jpg">
+      <img src="photos/photo2.jpg" alt="我们的故事" loading="lazy">
+      <div class="gallery-tile">🀈</div>
+    </div>
+    <div class="gallery-item" data-animate data-src="photos/photo3.jpg">
+      <img src="photos/photo3.jpg" alt="我们的故事" loading="lazy">
+      <div class="gallery-tile">🀉</div>
+    </div>
+    <div class="gallery-item" data-animate data-src="photos/photo4.jpg">
+      <img src="photos/photo4.jpg" alt="我们的故事" loading="lazy">
+      <div class="gallery-tile">🀊</div>
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose">✕</button>
+  <img id="lightboxImg" src="" alt="放大查看">
+</div>
+
 <!-- ═══════════ FOOTER ═══════════ -->
 <footer class="footer">
   <div class="footer-tiles">
@@ -1109,6 +1321,25 @@ window.addEventListener('scroll', () => {
   if (hero) {
     hero.style.setProperty('--scroll', scrolled * 0.3 + 'px');
     hero.style.backgroundPositionY = scrolled * 0.3 + 'px';
+  }
+});
+
+// ── Lightbox ──
+document.querySelectorAll('.gallery-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const src = item.dataset.src;
+    document.getElementById('lightboxImg').src = src;
+    document.getElementById('lightbox').classList.add('show');
+  });
+});
+
+document.getElementById('lightboxClose').addEventListener('click', () => {
+  document.getElementById('lightbox').classList.remove('show');
+});
+
+document.getElementById('lightbox').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('lightbox')) {
+    document.getElementById('lightbox').classList.remove('show');
   }
 });
 </script>
